@@ -15,7 +15,8 @@ RUN pip3 install --no-cache-dir --upgrade pip
 
 RUN pip3 install --no-cache-dir \
     "python-telegram-bot[all]" \
-    requests
+    requests \
+    python-docx
 
 ADD src/ /opt/api/
 WORKDIR /opt/api/

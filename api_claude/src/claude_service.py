@@ -2,10 +2,10 @@ import logging
 import anthropic
 import config
 
-logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ClaudeService:
-    def __init__(self, model_name: str = "claude-3-haiku-20240307"):  # Изменили название модели
+    def __init__(self, model_name: str = "claude-3-opus-20240229"):
         self.client = anthropic.Client(api_key=config.Claude_API_KEY)
         self.model_name = model_name
 
@@ -13,13 +13,14 @@ class ClaudeService:
         try:
             response = self.client.messages.create(
                 model=self.model_name,
-                max_tokens=1024,
-                temperature=0.7,
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=1024
             )
-            return response.content[0].text.strip()
+            logger.info(f"Anthropic raw response: {response}")
+
+            # Берём текст из атрибута .completion
+            completion = response.content[0].text
+            return completion.strip()
         except Exception as e:
-            logging.error(f"Ошибка при генерации ответа через Claude: {e}")
-            return f"Ошибка: {str(e)}"
+            logger.error(f"Ошибка при генерации ответа через Claude: {e}", exc_info=True)
+            raise e

@@ -26,7 +26,8 @@ RUN pip install --no-cache-dir \
     python-multipart \
     requests \
     openai \
-    "anthropic>=0.25.0"
+    "anthropic>=0.25.0" \
+    python-docx
 
 # Проверяем установленную версию библиотеки anthropic
 RUN python -c "import anthropic; print('Anthropic version:', anthropic.__version__)"

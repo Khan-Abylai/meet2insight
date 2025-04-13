@@ -1,0 +1,33 @@
+networks:
+  backend:
+services:
+  api_gpt:
+    hostname: api_llm
+    container_name: api_llm
+    build: api_claude/
+    environment:
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+    restart: always
+    ports:
+      - "9001:9001"
+    logging:
+      options:
+        max-size: 50m
+    networks:
+      - backend
+  telegram:
+    hostname: meeting_bot
+    container_name: meeting_bot
+    build: telegram/
+    environment:
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+      - PYTHONUNBUFFERED=1
+    restart: always
+    ipc: host
+    logging:
+      options:
+        max-size: 50m
+    networks:
+      - backend
